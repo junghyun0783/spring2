@@ -2,6 +2,8 @@ package com.gura.spring.cafe.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,12 +20,32 @@ public class CafeServiceImpl implements CafeService{
 	
 	
 
-	
 	@Autowired
 	private CafeDao cafeDao;
 	
 	@Override
-	public ModelAndView getList(int pageNum) {
+	public ModelAndView getList(HttpServletRequest request, int pageNum) {
+		//검색과 관련된 파라미터를 읽어와 본다.
+		String keyword=request.getParameter("keyword");
+		String condition=request.getParameter("condition");
+		
+		//BoardDto 객체를 생성해서
+		CafeDto dto=new CafeDto();
+		if(keyword != null){ //검색어가 전달된 경우
+			if(condition.equals("titlecontent")){ //제목+내용 검색
+				dto.setTitle(keyword);
+				dto.setContent(keyword);
+			}else if(condition.equals("title")){//제목 검색
+				dto.setTitle(keyword);
+			}else if(condition.equals("writer")){//작성자 검색
+				dto.setWriter(keyword);
+			}
+			// list.jsp 뷰페이지에서 필요한 내용을 request 에 담는다.
+			request.setAttribute("condition", condition);
+			request.setAttribute("keyword", keyword);
+		}
+		
+		
 		//보여줄 페이지 데이터의 시작 ResultSet row 번호
 		int startRowNum=1+(pageNum-1)*PAGE_ROW_COUNT;
 		//보여줄 페이지 데이터의 끝 ResultSet row 번호
@@ -44,7 +66,6 @@ public class CafeServiceImpl implements CafeService{
 		}
 		
 		//시작 row 번호와 끝 row 번호를 cafedto 에 담는다.
-		CafeDto dto=new CafeDto();
 		dto.setStartRowNum(startRowNum);
 		dto.setEndRowNum(endRowNum);
 		

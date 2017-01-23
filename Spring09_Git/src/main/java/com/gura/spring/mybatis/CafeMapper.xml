@@ -8,12 +8,24 @@
 	<select id="getList" resultType="cafeDto" parameterType="cafeDto">
 		SELECT *
 		FROM
-			(SELECT result1.*,ROWNUM rnum
-			FROM	(SELECT <include refid="cafeColumns"/>
+			(SELECT result1.*, ROWNUM rnum
+			 FROM 	(SELECT <include refid="cafeColumns"/>
 					FROM board_cafe
+					<where>
+					  	<if test="writer != null">
+					  		OR writer LIKE '%'||#{writer}||'%'
+					  	</if>
+					  	<if test="title != null">
+					  		OR title LIKE '%'||#{title}||'%'
+					  	</if>
+					  	<if test="content != null">
+					  		OR content LIKE '%'||#{content}||'%'
+					  	</if>
+				  	</where>
 					ORDER BY num DESC) result1
 			)
-		WHERE rnum BETWEEN #{startRowNum} AND #{endRowNum}
+		WHERE 
+		<![CDATA[ rnum >= #{startRowNum} AND rnum <= #{endRowNum} ]]>
 	</select>	
 	<insert id="insert" parameterType="cafeDto">
 		INSERT INTO board_cafe
@@ -41,12 +53,12 @@
 		SET title=#{title}, content=#{content}
 		WHERE num=#{num}
 	</update>	
+	
 	<select id="getCount" resultType="int">
-		SELECT NVL(MAX(ROWNUM),0)
+		SELECT NVL(MAX(ROWNUM), 0)
 		FROM board_cafe
 	</select>	
 </mapper>
-
 
 
 
