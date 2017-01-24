@@ -46,6 +46,12 @@ public class ShopController {
 		shopService.deposit(id, cash);
 		return "redirect:/shop/index.do";
 	}
+	
+	@RequestMapping("/shop/list")
+	public String list(){
+		
+		return "shop/list";
+	}
 }
 
 
