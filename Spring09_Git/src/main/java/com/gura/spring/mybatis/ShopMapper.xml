@@ -2,11 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="shop">
 	<!-- java.util.HashMap 은 hashmap 으로 표기 할 수 있다. -->
-	<insert id="deposit" parameterType="hashmap">
+	<update id="deposit" parameterType="hashmap">
 		UPDATE client_account
 		SET balance = balance + #{money}
-		WHERE id= #{id}
-	</insert>
+		WHERE id = #{id}
+	</update>
+	<update id="withDraw" parameterType="hashmap">
+		UPDATE client_account
+		SET balance = balance - #{money}
+		WHERE id = #{id}
+	</update>
+	<update id="addPoint" parameterType="hashmap">
+		UPDATE client_account
+		SET bonusPoint = bonusPoint + #{point}
+		WHERE id = #{id}
+	</update>
 </mapper>
 
 
