@@ -11,7 +11,7 @@
 	<h3>Gura 쇼핑몰 입니다.</h3>
 	<h3>공지 사항</h3>
 	<ul>
-		<c:forEach var="tmp" items="${info }">
+		<c:forEach var="tmp" items="${info}">
 			<li>${tmp}</li>
 		</c:forEach>
 	</ul>
